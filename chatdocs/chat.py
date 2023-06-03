@@ -7,13 +7,14 @@ from langchain.embeddings import HuggingFaceInstructEmbeddings
 from langchain.llms import CTransformers, HuggingFacePipeline
 from langchain.vectorstores import Chroma
 from rich import print
+from rich.markup import escape
 from rich.panel import Panel
 
 from . import config
 
 
 def print_response(text: str) -> None:
-    print(f"[bright_cyan]{text}[/bright_cyan]", end="", flush=True)
+    print(f"[bright_cyan]{escape(text)}", end="", flush=True)
 
 
 class StreamingPrintCallbackHandler(StreamingStdOutCallbackHandler):
@@ -76,16 +77,16 @@ def chat(
         print("Type your query below and press Enter.")
         print("Type 'exit' or 'quit' or 'q' to exit the application.\n")
     while True:
-        print("[bold]Q:[/bold] ", end="", flush=True)
+        print("[bold]Q: ", end="", flush=True)
         if interactive:
             query = input()
         else:
-            print(query)
+            print(escape(query))
         print()
         if query.strip() in ["exit", "quit", "q"]:
             print("Exiting...\n")
             break
-        print("[bold]A:[/bold]", end="", flush=True)
+        print("[bold]A:", end="", flush=True)
 
         res = qa(query)
         if hf:
@@ -93,9 +94,10 @@ def chat(
 
         print()
         for doc in res["source_documents"]:
+            source, content = doc.metadata["source"], doc.page_content
             print(
                 Panel(
-                    f"[bright_blue]{doc.metadata['source']}[/bright_blue]\n\n{doc.page_content}"
+                    f"[bright_blue]{escape(source)}[/bright_blue]\n\n{escape(content)}"
                 )
             )
         print()
