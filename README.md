@@ -14,6 +14,7 @@ Chat with your documents offline using AI. No data leaves your system. Internet 
 
 - Supports many GGML models via [C Transformers](https://github.com/marella/ctransformers)
 - Supports [🤗 Transformers](https://github.com/huggingface/transformers)
+- Web UI
 - GPU support
 - Highly configurable via `chatdocs.yml`
 
@@ -46,8 +47,23 @@ chatdocs add /path/to/documents
 Chat with your documents using:
 
 ```sh
+chatdocs ui
+```
+
+Open http://localhost:5000 in your browser to access the web UI.
+
+It also has a nice command-line interface:
+
+```sh
 chatdocs chat
 ```
+
+<details>
+<summary><strong>Show preview</strong></summary><br>
+
+![Demo](https://github.com/marella/chatdocs/raw/main/docs/cli.png)
+
+</details>
 
 ## Configuration
 
@@ -167,10 +183,6 @@ huggingface:
 ```
 
 You may have to reinstall PyTorch with CUDA enabled by following the instructions [here](https://pytorch.org/get-started/locally/).
-
-## UI
-
-Coming Soon
 
 ## License
 
