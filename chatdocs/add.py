@@ -1,6 +1,6 @@
 import os
 import glob
-from typing import List
+from typing import Any, Dict, List
 from multiprocessing import Pool
 
 from tqdm import tqdm
@@ -18,12 +18,9 @@ from langchain.document_loaders import (
     UnstructuredWordDocumentLoader,
 )
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.vectorstores import Chroma
-from langchain.embeddings import HuggingFaceInstructEmbeddings
 from langchain.docstore.document import Document
-from chromadb.config import Settings
 
-from . import config
+from .vectorstores import get_vectorstore, get_vectorstore_from_documents
 
 
 # Custom document loaders
@@ -143,23 +140,12 @@ def does_vectorstore_exist(persist_directory: str) -> bool:
     return False
 
 
-def add(source_directory: str, persist_directory: str) -> None:
-    # Create embeddings
-    embeddings = HuggingFaceInstructEmbeddings(model_name=config.EMBEDDINGS_MODEL)
-    chroma_settings = Settings(
-        chroma_db_impl=config.CHROMA_DB_IMPL,
-        persist_directory=persist_directory,
-        anonymized_telemetry=False,
-    )
-
+def add(config: Dict[str, Any], source_directory: str) -> None:
+    persist_directory = config["chroma"]["persist_directory"]
     if does_vectorstore_exist(persist_directory):
         # Update and store locally vectorstore
         print(f"Appending to existing vectorstore at {persist_directory}")
-        db = Chroma(
-            persist_directory=persist_directory,
-            embedding_function=embeddings,
-            client_settings=chroma_settings,
-        )
+        db = get_vectorstore(config)
         collection = db.get()
         texts = process_documents(
             source_directory,
@@ -172,11 +158,6 @@ def add(source_directory: str, persist_directory: str) -> None:
         print("Creating new vectorstore")
         texts = process_documents(source_directory)
         print(f"Creating embeddings. May take a few minutes...")
-        db = Chroma.from_documents(
-            texts,
-            embeddings,
-            persist_directory=persist_directory,
-            client_settings=chroma_settings,
-        )
+        db = get_vectorstore_from_documents(config, texts)
     db.persist()
     db = None

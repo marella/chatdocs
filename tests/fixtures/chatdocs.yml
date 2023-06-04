@@ -1,0 +1,7 @@
+embeddings:
+  model: all-MiniLM-L6-v2
+
+ctransformers:
+  model: marella/gpt-2-ggml
+  model_type: gpt2
+  lib: avx

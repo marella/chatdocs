@@ -1,0 +1,26 @@
+embeddings:
+  model: hkunlp/instructor-large
+
+llm: ctransformers
+
+ctransformers:
+  model: TheBloke/Wizard-Vicuna-7B-Uncensored-GGML
+  model_type: llama
+  config:
+    context_length: 1024
+
+huggingface:
+  model: TheBloke/Wizard-Vicuna-7B-Uncensored-HF
+  pipeline_kwargs:
+    max_new_tokens: 256
+
+download: false
+
+chroma:
+  persist_directory: db
+  chroma_db_impl: duckdb+parquet
+  anonymized_telemetry: false
+
+retriever:
+  search_kwargs:
+    k: 4

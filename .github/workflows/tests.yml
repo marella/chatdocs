@@ -35,8 +35,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install .
 
+      - name: Copy chatdocs.yml
+        run: cp tests/fixtures/chatdocs.yml .
+
+      - name: Test download
+        run: chatdocs download
+
       - name: Test add
         run: chatdocs add examples
 
       - name: Test chat
-        run: chatdocs chat 'Why was the NATO created?' --model marella/gpt-2-ggml --download --lib avx
+        run: chatdocs chat 'Why was the NATO created?'

@@ -1,9 +1,10 @@
-from langchain.embeddings import HuggingFaceInstructEmbeddings
-from langchain.llms import CTransformers
+from typing import Any, Dict
 
-from . import config
+from .embeddings import get_embeddings
+from .llms import get_llm
 
 
-def download() -> None:
-    HuggingFaceInstructEmbeddings(model_name=config.EMBEDDINGS_MODEL)
-    CTransformers(model=config.MODEL, model_type=config.MODEL_TYPE)
+def download(config: Dict[str, Any]) -> None:
+    config = {**config, "download": True}
+    get_embeddings(config)
+    get_llm(config)

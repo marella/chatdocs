@@ -16,6 +16,7 @@ setup(
     url="https://github.com/marella/{}".format(name),
     license="MIT",
     packages=[name],
+    package_data={name: ["data/chatdocs.yml"]},
     entry_points={
         "console_scripts": [
             f"{name} = {name}.main:app",
@@ -24,16 +25,18 @@ setup(
     install_requires=[
         "chromadb>=0.3.0,<0.4.0",
         "ctransformers>=0.2.5,<0.3.0",
-        "InstructorEmbedding>=1.0.1",
+        "deepmerge>=1.1.0,<2.0.0",
+        "InstructorEmbedding>=1.0.1,<2.0.0",
         "langchain>=0.0.181",
-        "sentence-transformers>=2.2.2",
-        "tqdm>=4.64.1",
+        "pyyaml>=6.0",
+        "sentence-transformers>=2.2.2,<3.0.0",
+        "tqdm>=4.64.1,<5.0.0",
         "typer>=0.9.0",
-        "typing-extensions>=4.4.0",
+        "typing-extensions>=4.4.0,<5.0.0",
         # Document Loaders
         "extract-msg>=0.41.0,<0.42.0",
-        "pandoc==2.3",
-        "pypandoc==1.11",
+        "pandoc>=2.3,<3.0.0",
+        "pypandoc>=1.11,<2.0.0",
         "pdfminer.six==20221105",
         "unstructured>=0.6.0,<0.7.0",
         # Temporary fix for `rich`, `numpy` version conflicts.
