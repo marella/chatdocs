@@ -9,7 +9,7 @@ from .utils import print_answer
 
 
 def chat(config: Dict[str, Any], query: Optional[str] = None) -> None:
-    qa = get_retrieval_qa(config)
+    qa = get_retrieval_qa(config, callback=print_answer)
 
     interactive = not query
     print()

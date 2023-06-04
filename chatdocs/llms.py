@@ -1,23 +1,27 @@
-from typing import Any, Dict
+from typing import Any, Callable, Dict, Optional
 
-from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
+from langchain.callbacks.base import BaseCallbackHandler
 from langchain.llms import CTransformers, HuggingFacePipeline
 from langchain.llms.base import LLM
 
-from .utils import merge, print_answer
+from .utils import merge
 
 
-class StreamingPrintCallbackHandler(StreamingStdOutCallbackHandler):
-    def on_llm_new_token(self, token: str, **kwargs: Any) -> None:
-        print_answer(token)
+def get_llm(
+    config: Dict[str, Any],
+    *,
+    callback: Optional[Callable[[str], None]] = None,
+) -> LLM:
+    class CallbackHandler(BaseCallbackHandler):
+        def on_llm_new_token(self, token: str, **kwargs) -> None:
+            callback(token)
 
-
-def get_llm(config: Dict[str, Any]) -> LLM:
+    callbacks = [CallbackHandler()] if callback else None
     local_files_only = not config["download"]
     if config["llm"] == "ctransformers":
         config = {**config["ctransformers"]}
         config = merge(config, {"config": {"local_files_only": local_files_only}})
-        llm = CTransformers(callbacks=[StreamingPrintCallbackHandler()], **config)
+        llm = CTransformers(callbacks=callbacks, **config)
     else:
         config = {**config["huggingface"]}
         config["model_id"] = config.pop("model")

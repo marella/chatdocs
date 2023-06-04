@@ -16,7 +16,7 @@ setup(
     url="https://github.com/marella/{}".format(name),
     license="MIT",
     packages=[name],
-    package_data={name: ["data/chatdocs.yml"]},
+    package_data={name: ["data/chatdocs.yml", "data/index.html"]},
     entry_points={
         "console_scripts": [
             f"{name} = {name}.main:app",
@@ -29,6 +29,7 @@ setup(
         "InstructorEmbedding>=1.0.1,<2.0.0",
         "langchain>=0.0.181",
         "pyyaml>=6.0",
+        "quart>=0.18.3,<0.19.0",
         "sentence-transformers>=2.2.2,<3.0.0",
         "tqdm>=4.64.1,<5.0.0",
         "typer>=0.9.0",

@@ -1,0 +1,217 @@
+<script>
+  const ws = new WebSocket(`ws://${location.host}/ws`);
+
+  ws.addEventListener('message', (event) => {
+    data = JSON.parse(event.data);
+    onReceive(data);
+  });
+
+  const send = (req) => {
+    req = JSON.stringify(req);
+    ws.send(req);
+  };
+
+  const el = (tag) => document.createElement(tag);
+
+  const onReceive = (res) => {
+    const { id } = res;
+    const answer = document.getElementById('answer-' + id);
+    const sources = document.getElementById('sources-' + id);
+    if (res.chunk) {
+      answer.innerText += res.chunk;
+    } else {
+      answer.innerText = res.result;
+      for (const { source, content } of res.sources) {
+        const summary = el('summary');
+        summary.innerText = source;
+
+        const details = el('details');
+        details.innerText = content;
+        details.appendChild(summary);
+
+        sources.appendChild(details);
+      }
+      form.reset();
+      form.elements.submit.disabled = false;
+      form.elements.query.disabled = false;
+    }
+    document.getElementById('end').scrollIntoView();
+  };
+
+  function onSubmit(event) {
+    event.preventDefault();
+    event.target.elements.submit.disabled = true;
+    const query = new FormData(event.target).get('query');
+    event.target.elements.query.disabled = true;
+    event.target.elements.query.value = 'Processing your query. Please wait...';
+    const id = 'mid-' + performance.now();
+    const messages = document.getElementById('messages');
+
+    const me = el('div');
+    me.classList.add('message', 'message-me');
+    messages.appendChild(me);
+
+    const q = el('div');
+    q.innerText = query;
+    me.appendChild(q);
+
+    const ai = el('div');
+    ai.classList.add('message', 'message-ai');
+    messages.appendChild(ai);
+
+    const answer = el('div');
+    answer.classList.add('answer');
+    answer.setAttribute('id', 'answer-' + id);
+    ai.appendChild(answer);
+
+    const sources = el('div');
+    sources.classList.add('sources');
+    sources.setAttribute('id', 'sources-' + id);
+    ai.appendChild(sources);
+
+    document.getElementById('end').scrollIntoView();
+
+    send({ id, query });
+  }
+</script>
+
+<style>
+  *,
+  ::before,
+  ::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    line-height: 1.5;
+  }
+
+  body {
+    margin: 0;
+    font-family: system-ui, sans-serif;
+  }
+
+  button,
+  input,
+  optgroup,
+  select,
+  textarea {
+    font-family: inherit;
+    font-size: 100%;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  button,
+  select {
+    text-transform: none;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    -webkit-clip-path: inset(50%);
+    clip-path: inset(50%);
+    border: 0;
+  }
+
+  body {
+    background-color: #343541;
+    color: #ececf1;
+  }
+
+  main {
+    padding-bottom: 100px;
+  }
+
+  .message {
+    padding: 1.5rem 0;
+    line-height: 1.75;
+    border-bottom: 1px solid rgba(32, 33, 35, 0.5);
+  }
+
+  .message br {
+    line-height: 1;
+  }
+
+  .message > div {
+    max-width: 48rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .message-ai {
+    background-color: #444654;
+    color: #d1d5db;
+  }
+
+  .answer {
+    margin-bottom: 1.25em;
+  }
+
+  .sources details {
+    margin-bottom: 0.625em;
+  }
+
+  .sources summary {
+    cursor: pointer;
+    font-weight: 500;
+    color: #fff;
+  }
+
+  footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    background-image: linear-gradient(
+      180deg,
+      rgba(53, 55, 64, 0),
+      #353740 58.85%
+    );
+  }
+
+  footer form {
+    flex-grow: 1;
+    max-width: 48rem;
+    margin: 0 auto;
+  }
+
+  footer input {
+    width: 100%;
+    padding: 1rem;
+    background-color: #202123;
+    color: #fff;
+    border-radius: 0.75rem;
+    border: 0;
+    outline: 0;
+  }
+</style>
+
+<main id="messages"></main>
+<div id="end"></div>
+<footer>
+  <form id="form">
+    <input
+      type="text"
+      name="query"
+      required
+      placeholder="Type your query and press Enter."
+      autofocus
+    />
+    <button type="submit" name="submit" class="sr-only">Send</button>
+  </form>
+</footer>
+
+<script>
+  const form = document.getElementById('form');
+  form.addEventListener('submit', onSubmit);
+</script>

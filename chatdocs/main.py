@@ -54,3 +54,11 @@ def chat(
 
     config = get_config(config)
     chat(config=config, query=query)
+
+
+@app.command()
+def ui(config: ConfigPath = None):
+    from .ui import ui
+
+    config = get_config(config)
+    ui(config=config)

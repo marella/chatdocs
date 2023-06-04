@@ -16,6 +16,8 @@ huggingface:
 
 download: false
 
+port: 5000
+
 chroma:
   persist_directory: db
   chroma_db_impl: duckdb+parquet
