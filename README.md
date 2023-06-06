@@ -18,6 +18,26 @@ Chat with your documents offline using AI. No data leaves your system. Internet 
 - GPU support
 - Highly configurable via `chatdocs.yml`
 
+<details>
+<summary><strong>Show supported document types</strong></summary><br>
+
+| Extension       | Format                         |
+| :-------------- | :----------------------------- |
+| `.csv`          | CSV                            |
+| `.docx`, `.doc` | Word Document                  |
+| `.enex`         | EverNote                       |
+| `.eml`          | Email                          |
+| `.epub`         | EPub                           |
+| `.html`         | HTML                           |
+| `.md`           | Markdown                       |
+| `.msg`          | Outlook Message                |
+| `.odt`          | Open Document Text             |
+| `.pdf`          | Portable Document Format (PDF) |
+| `.pptx`, `.ppt` | PowerPoint Document            |
+| `.txt`          | Text file (UTF-8)              |
+
+</details>
+
 ## Installation
 
 Install the tool using:
