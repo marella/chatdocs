@@ -17,7 +17,11 @@ def get_gptq_llm(config: Dict[str, Any]) -> LLM:
             "Please install it with `pip install chatdocs[gptq]`"
         )
 
-    from transformers import AutoTokenizer, TextGenerationPipeline
+    from transformers import (
+        AutoTokenizer,
+        TextGenerationPipeline,
+        MODEL_FOR_CAUSAL_LM_MAPPING,
+    )
 
     local_files_only = not config["download"]
     config = {**config["gptq"]}
@@ -42,6 +46,7 @@ def get_gptq_llm(config: Dict[str, Any]) -> LLM:
         local_files_only=local_files_only,
         **config,
     )
+    MODEL_FOR_CAUSAL_LM_MAPPING.register("chatdocs-gptq", model.__class__)
     pipeline = TextGenerationPipeline(
         task="text-generation",
         model=model,
