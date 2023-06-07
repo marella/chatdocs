@@ -45,7 +45,7 @@ setup(
     ],
     extras_require={
         "gptq": [
-            "auto-gptq>=0.2.1,<0.3.0",
+            "auto-gptq @ git+https://github.com/PanQiWei/AutoGPTQ@v0.2.1",
         ],
         "tests": [
             "pytest",
