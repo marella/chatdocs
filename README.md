@@ -142,10 +142,10 @@ huggingface:
 
 ### GPTQ
 
-To use GPTQ models, install the required packages using:
+To use GPTQ models, install the `auto-gptq` package using:
 
 ```sh
-pip install chatdocs[gptq]
+pip install git+https://github.com/PanQiWei/AutoGPTQ@v0.2.1
 ```
 
 and add the following to your `chatdocs.yml`:
@@ -244,7 +244,7 @@ After installing PyTorch with CUDA enabled, you should also reinstall the `auto-
 
 ```sh
 pip uninstall auto-gptq --yes
-pip install chatdocs[gptq]
+pip install git+https://github.com/PanQiWei/AutoGPTQ@v0.2.1
 ```
 
 ## License
