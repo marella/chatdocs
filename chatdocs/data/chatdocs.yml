@@ -14,6 +14,12 @@ huggingface:
   pipeline_kwargs:
     max_new_tokens: 256
 
+gptq:
+  model: TheBloke/Wizard-Vicuna-7B-Uncensored-GPTQ
+  model_file: Wizard-Vicuna-7B-Uncensored-GPTQ-4bit-128g.no-act-order.safetensors
+  pipeline_kwargs:
+    max_new_tokens: 256
+
 download: false
 
 port: 5000

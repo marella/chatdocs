@@ -5,7 +5,10 @@ from rich.markup import escape
 from rich.panel import Panel
 
 from .chains import get_retrieval_qa
-from .utils import print_answer
+
+
+def print_answer(text: str) -> None:
+    print(f"[bright_cyan]{escape(text)}", end="", flush=True)
 
 
 def chat(config: Dict[str, Any], query: Optional[str] = None) -> None:

@@ -44,6 +44,9 @@ setup(
         "argilla==1.8.0",
     ],
     extras_require={
+        "gptq": [
+            "auto-gptq>=0.2.1,<0.3.0",
+        ],
         "tests": [
             "pytest",
         ],
