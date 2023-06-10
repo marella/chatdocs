@@ -5,6 +5,7 @@ llm: ctransformers
 
 ctransformers:
   model: TheBloke/Wizard-Vicuna-7B-Uncensored-GGML
+  model_file: Wizard-Vicuna-7B-Uncensored.ggmlv3.q4_0.bin
   model_type: llama
   config:
     context_length: 1024

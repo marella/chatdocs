@@ -110,6 +110,7 @@ To change the C Transformers GGML model, add and change the following in your `c
 ```yml
 ctransformers:
   model: TheBloke/Wizard-Vicuna-7B-Uncensored-GGML
+  model_file: Wizard-Vicuna-7B-Uncensored.ggmlv3.q4_0.bin
   model_type: llama
 ```
 

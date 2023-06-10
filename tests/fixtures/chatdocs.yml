@@ -3,5 +3,6 @@ embeddings:
 
 ctransformers:
   model: marella/gpt-2-ggml
+  model_file: ggml-model.bin
   model_type: gpt2
   lib: avx
