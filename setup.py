@@ -7,7 +7,7 @@ name = "chatdocs"
 
 setup(
     name=name,
-    version="0.2.3",
+    version="0.2.4",
     description="Chat with your documents offline using AI.",
     long_description=long_description,
     long_description_content_type="text/markdown",
