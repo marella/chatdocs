@@ -4,7 +4,9 @@ on:
   push:
     paths:
       - 'chatdocs/**'
+      - 'tests/**'
       - setup.py
+  pull_request:
   workflow_dispatch:
 
 jobs:
@@ -42,7 +44,9 @@ jobs:
         run: chatdocs download
 
       - name: Test add
-        run: chatdocs add examples
+        run: |
+          chatdocs add examples
+          chatdocs add tests/fixtures/documents
 
       - name: Test chat
         run: chatdocs chat 'Why was the NATO created?'
