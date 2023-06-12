@@ -60,4 +60,4 @@ def ui(config: Dict[str, Any]) -> None:
                 await send(res)
                 q.task_done()
 
-    app.run(host="localhost", port=config["port"], use_reloader=False)
+    app.run(host=config["ip"], port=config["port"], use_reloader=False)
