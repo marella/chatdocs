@@ -139,11 +139,17 @@ def does_vectorstore_exist(persist_directory: str) -> bool:
                 return True
     return False
 
+import time
 from watchdog.observers import Observer
-from watchdog.events import FileSystemHandler
+from watchdog.events import FileSystemEventHandler
 
-class AddHandler(FileSystemHandler, config, source_directory):
+class AddHandler(FileSystemEventHandler, config, source_directory):
+    def __init__(self):
+        config = self.config
+        source_directory = self.source_directory
+        
     def on_modified(self, event, config, source_directory) -> None:
+        print("Document Added")
         persist_directory = config["chroma"]["persist_directory"]
         if does_vectorstore_exist(persist_directory):
             # Update and store locally vectorstore
@@ -167,8 +173,9 @@ class AddHandler(FileSystemHandler, config, source_directory):
 
 def watchandadd(config: Dict[str, Any], source_directory: str) -> None:
     event_handler = AddHandler(config, source_directory)
+    on_modified = event_handler.on_modified(config, source_directory, event == 'modified')
     observer = Observer()
-    observer.scedule(event_handler, path=source_directory, recursive=True)
+    observer.schedule(on_modified, path=source_directory, recursive=True)
     observer.start()
 
     try:
