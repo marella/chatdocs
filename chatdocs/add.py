@@ -143,39 +143,39 @@ import time
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
-class AddHandler(FileSystemEventHandler, config, source_directory):
-    def __init__(self):
-        config = self.config
-        source_directory = self.source_directory
-        
-    def on_modified(self, event, config, source_directory) -> None:
-        print("Document Added")
-        persist_directory = config["chroma"]["persist_directory"]
-        if does_vectorstore_exist(persist_directory):
-            # Update and store locally vectorstore
-            print(f"Appending to existing vectorstore at {persist_directory}")
-            db = get_vectorstore(config)
-            collection = db.get()
-            texts = process_documents(
-                source_directory,
-                [metadata["source"] for metadata in collection["metadatas"]],
-            )
-            print(f"Creating embeddings. May take a few minutes...")
-            db.add_documents(texts)
-        else:
-            # Create and store locally vectorstore
-            print("Creating new vectorstore")
-            texts = process_documents(source_directory)
-            print(f"Creating embeddings. May take a few minutes...")
-            db = get_vectorstore_from_documents(config, texts)
-            db.persist()
-            db = None
+class AddHandler(FileSystemEventHandler):
+    def __init__(self, config, source_directory):
+        self.config = config
+        self.source_directory = source_directory
+
+    def on_modified(self, event) -> None:
+        if event.event_type == 'modified':
+            print("Document Added")
+            persist_directory = self.config["chroma"]["persist_directory"]
+            if does_vectorstore_exist(persist_directory):
+                # Update and store locally vectorstore
+                print(f"Appending to existing vectorstore at {persist_directory}")
+                db = get_vectorstore(self.config)
+                collection = db.get()
+                texts = process_documents(
+                    self.source_directory,
+                    [metadata["source"] for metadata in collection["metadatas"]],
+                )
+                print(f"Creating embeddings. May take a few minutes...")
+                db.add_documents(texts)
+            else:
+                # Create and store locally vectorstore
+                print("Creating new vectorstore")
+                texts = process_documents(source_directory)
+                print(f"Creating embeddings. May take a few minutes...")
+                db = get_vectorstore_from_documents(self.config, texts)
+                db.persist()
+                db = None
 
 def watchandadd(config: Dict[str, Any], source_directory: str) -> None:
     event_handler = AddHandler(config, source_directory)
-    on_modified = event_handler.on_modified(config, source_directory, event == 'modified')
     observer = Observer()
-    observer.schedule(on_modified, path=source_directory, recursive=True)
+    observer.schedule(event_handler, path=source_directory, recursive=True)
     observer.start()
 
     try:
