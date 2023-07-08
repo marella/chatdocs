@@ -139,25 +139,43 @@ def does_vectorstore_exist(persist_directory: str) -> bool:
                 return True
     return False
 
+from watchdog.observers import Observer
+from watchdog.events import FileSystemHandler
 
-def add(config: Dict[str, Any], source_directory: str) -> None:
-    persist_directory = config["chroma"]["persist_directory"]
-    if does_vectorstore_exist(persist_directory):
-        # Update and store locally vectorstore
-        print(f"Appending to existing vectorstore at {persist_directory}")
-        db = get_vectorstore(config)
-        collection = db.get()
-        texts = process_documents(
-            source_directory,
-            [metadata["source"] for metadata in collection["metadatas"]],
-        )
-        print(f"Creating embeddings. May take a few minutes...")
-        db.add_documents(texts)
-    else:
-        # Create and store locally vectorstore
-        print("Creating new vectorstore")
-        texts = process_documents(source_directory)
-        print(f"Creating embeddings. May take a few minutes...")
-        db = get_vectorstore_from_documents(config, texts)
-    db.persist()
-    db = None
+class AddHandler(FileSystemHandler, config, source_directory):
+    def on_modified(self, event, config, source_directory) -> None:
+        persist_directory = config["chroma"]["persist_directory"]
+        if does_vectorstore_exist(persist_directory):
+            # Update and store locally vectorstore
+            print(f"Appending to existing vectorstore at {persist_directory}")
+            db = get_vectorstore(config)
+            collection = db.get()
+            texts = process_documents(
+                source_directory,
+                [metadata["source"] for metadata in collection["metadatas"]],
+            )
+            print(f"Creating embeddings. May take a few minutes...")
+            db.add_documents(texts)
+        else:
+            # Create and store locally vectorstore
+            print("Creating new vectorstore")
+            texts = process_documents(source_directory)
+            print(f"Creating embeddings. May take a few minutes...")
+            db = get_vectorstore_from_documents(config, texts)
+            db.persist()
+            db = None
+
+def watchandadd(config: Dict[str, Any], source_directory: str) -> None:
+    event_handler = AddHandler(config, source_directory)
+    observer = Observer()
+    observer.scedule(event_handler, path=source_directory, recursive=True)
+    observer.start()
+
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        observer.stop()
+
+    observer.join()
+

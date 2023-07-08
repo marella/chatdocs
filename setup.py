@@ -23,6 +23,9 @@ setup(
         ],
     },
     install_requires=[
+        # Watcher to auto add files
+        "watchdog>=2.1.5",
+        # Normal Stuff
         "chromadb>=0.3.0,<0.4.0",
         "ctransformers>=0.2.5,<0.3.0",
         "deepmerge>=1.1.0,<2.0.0",
@@ -42,6 +45,7 @@ setup(
         "unstructured>=0.6.0,<0.7.0",
         # Temporary fix for `rich`, `numpy` version conflicts.
         "argilla==1.8.0",
+        "pydantic<2,>=1",
     ],
     extras_require={
         "gptq": [
