@@ -34,10 +34,10 @@ def add(
     ],
     config: ConfigPath = None,
 ):
-    from .add import add
+    from .add import watchandadd
 
     config = get_config(config)
-    add(config=config, source_directory=str(directory))
+    watchandadd(config=config, source_directory=str(directory))
 
 
 @app.command()
