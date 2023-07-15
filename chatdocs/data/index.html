@@ -1,6 +1,7 @@
 <title>ChatDocs</title>
 
 <script>
+  const auth = new URLSearchParams(window.location.search).get('auth');
   const ws = new WebSocket(`ws://${location.host}/ws`);
 
   ws.addEventListener('message', (event) => {
@@ -9,6 +10,9 @@
   });
 
   const send = (req) => {
+    if (auth) {
+      req['auth'] = auth;
+    }
     req = JSON.stringify(req);
     ws.send(req);
   };

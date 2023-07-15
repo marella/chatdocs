@@ -24,7 +24,7 @@ setup(
     },
     install_requires=[
         "chromadb>=0.3.0,<0.4.0",
-        "ctransformers>=0.2.5,<0.3.0",
+        "ctransformers>=0.2.12,<0.3.0",
         "deepmerge>=1.1.0,<2.0.0",
         "InstructorEmbedding>=1.0.1,<2.0.0",
         "langchain>=0.0.181",

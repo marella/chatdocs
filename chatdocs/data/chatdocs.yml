@@ -25,6 +25,7 @@ download: false
 
 host: localhost
 port: 5000
+auth: false
 
 chroma:
   persist_directory: db
