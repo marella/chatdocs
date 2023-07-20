@@ -7,7 +7,7 @@ name = "chatdocs"
 
 setup(
     name=name,
-    version="0.2.4",
+    version="0.2.5",
     description="Chat with your documents offline using AI.",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -27,7 +27,7 @@ setup(
         "watchdog>=2.1.5",
         # Normal Stuff
         "chromadb>=0.3.0,<0.4.0",
-        "ctransformers>=0.2.5,<0.3.0",
+        "ctransformers>=0.2.12,<0.3.0",
         "deepmerge>=1.1.0,<2.0.0",
         "InstructorEmbedding>=1.0.1,<2.0.0",
         "langchain>=0.0.181",

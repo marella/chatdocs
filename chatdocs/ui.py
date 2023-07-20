@@ -1,9 +1,12 @@
 import json
+import secrets
 from queue import Queue
 from threading import Thread
 from typing import Any, Dict
 
 from quart import Quart, render_template, websocket
+from rich import print
+from rich.panel import Panel
 
 from .chains import get_retrieval_qa
 
@@ -31,6 +34,7 @@ def ui(config: Dict[str, Any]) -> None:
         q.put(res)
 
     app = Quart(__name__, template_folder="data")
+    auth = secrets.token_hex() if config["auth"] else None
 
     @app.get("/")
     async def index():
@@ -41,6 +45,9 @@ def ui(config: Dict[str, Any]) -> None:
         while True:
             req = await receive()
             id, query = req["id"], req["query"]
+            if auth and auth != req.get("auth"):
+                print("Authentication error.")
+                return
             Thread(target=worker, daemon=True, args=(query,)).start()
 
             done = False
@@ -60,4 +67,7 @@ def ui(config: Dict[str, Any]) -> None:
                 await send(res)
                 q.task_done()
 
-    app.run(host=config["host"], port=config["port"], use_reloader=False)
+    host, port = config["host"], config["port"]
+    if auth:
+        print(Panel(f"Visit [bright_blue]http://localhost:{port}?auth={auth}"))
+    app.run(host=host, port=port, use_reloader=False)
