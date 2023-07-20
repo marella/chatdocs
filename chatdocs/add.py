@@ -163,20 +163,22 @@ class AddHandler(PatternMatchingEventHandler):
             )
             print(f"Creating embeddings. May take a few minutes...")
             db.add_documents(texts)
-        else:
-            # Create and store locally vectorstore
-            print("Creating new vectorstore")
-            texts = process_documents(self.source_directory)
-            print(f"Creating embeddings. May take a few minutes...")
-            db = get_vectorstore_from_documents(self.config, texts)
-            db.persist()
-            db = None
-
+        
 def watchandadd(config: Dict[str, Any], source_directory: str) -> None:
-    event_handler = AddHandler(config, source_directory)
-    observer = Observer()
-    observer.schedule(event_handler, path=source_directory, recursive=True)
-    observer.start()
+    persist_directory = config["chroma"]["persist_directory"]
+    if not does_vectorstore_exist(persist_directory):
+        # Create and store locally vectorstore
+        print("Creating new vectorstore")
+        texts = process_documents(source_directory)
+        print(f"Creating embeddings. May take a few minutes...")
+        db = get_vectorstore_from_documents(config, texts)
+        db.persist()
+        db = None
+    else:
+        event_handler = AddHandler(config, source_directory)
+        observer = Observer()
+        observer.schedule(event_handler, path=source_directory, recursive=True)
+        observer.start()
 
     try:
         while True:
