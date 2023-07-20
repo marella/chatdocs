@@ -166,7 +166,7 @@ class AddHandler(PatternMatchingEventHandler):
         else:
             # Create and store locally vectorstore
             print("Creating new vectorstore")
-            texts = process_documents(source_directory)
+            texts = process_documents(self.source_directory)
             print(f"Creating embeddings. May take a few minutes...")
             db = get_vectorstore_from_documents(self.config, texts)
             db.persist()
