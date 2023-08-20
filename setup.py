@@ -28,6 +28,7 @@ setup(
         "deepmerge>=1.1.0,<2.0.0",
         "InstructorEmbedding>=1.0.1,<2.0.0",
         "langchain>=0.0.181",
+        "pydantic>=1.9,<2.0",
         "pyyaml>=6.0",
         "quart>=0.18.3,<0.19.0",
         "sentence-transformers>=2.2.2,<3.0.0",
