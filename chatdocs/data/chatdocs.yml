@@ -17,7 +17,7 @@ huggingface:
 
 gptq:
   model: TheBloke/Wizard-Vicuna-7B-Uncensored-GPTQ
-  model_file: Wizard-Vicuna-7B-Uncensored-GPTQ-4bit-128g.no-act.order.safetensors
+  model_file: model.safetensors
   pipeline_kwargs:
     max_new_tokens: 256
 
