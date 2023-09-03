@@ -4,6 +4,8 @@ Chat with your documents offline using AI. No data leaves your system. Internet 
 
 ![Web UI](https://github.com/marella/chatdocs/raw/main/docs/demo.png)
 
+**Contents**
+
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
@@ -12,7 +14,7 @@ Chat with your documents offline using AI. No data leaves your system. Internet 
 
 ## Features
 
-- Supports GGML models via [C Transformers](https://github.com/marella/ctransformers)
+- Supports GGML/GGUF models via [CTransformers](https://github.com/marella/ctransformers)
 - Supports 🤗 Transformers models
 - Supports GPTQ models
 - Web UI
@@ -103,9 +105,9 @@ embeddings:
 
 > **Note:** When you change the embeddings model, delete the `db` directory and add documents again.
 
-### C Transformers
+### CTransformers
 
-To change the C Transformers GGML model, add and change the following in your `chatdocs.yml`:
+To change the CTransformers (GGML/GGUF) model, add and change the following in your `chatdocs.yml`:
 
 ```yml
 ctransformers:
@@ -141,29 +143,11 @@ huggingface:
 
 > **Note:** When you add a new model for the first time, run `chatdocs download` to download the model before using it.
 
-### GPTQ
-
-To use GPTQ models, install the `auto-gptq` package using:
+To use GPTQ models with 🤗 Transformers, install the necessary packages using:
 
 ```sh
 pip install chatdocs[gptq]
 ```
-
-and add the following to your `chatdocs.yml`:
-
-```yml
-llm: gptq
-```
-
-To change the GPTQ model, add and change the following in your `chatdocs.yml`:
-
-```yml
-gptq:
-  model: TheBloke/Wizard-Vicuna-7B-Uncensored-GPTQ
-  model_file: Wizard-Vicuna-7B-Uncensored-GPTQ-4bit-128g.no-act-order.safetensors
-```
-
-> **Note:** When you add a new model for the first time, run `chatdocs download` to download the model before using it.
 
 ## GPU
 
@@ -179,11 +163,9 @@ embeddings:
 
 You may have to reinstall PyTorch with CUDA enabled by following the instructions [here](https://pytorch.org/get-started/locally/).
 
-### C Transformers
+### CTransformers
 
-> **Note:** Currently only LLaMA GGML models have GPU support.
-
-To enable GPU (CUDA) support for the C Transformers GGML model, add the following to your `chatdocs.yml`:
+To enable GPU (CUDA) support for the CTransformers (GGML/GGUF) model, add the following to your `chatdocs.yml`:
 
 ```yml
 ctransformers:
@@ -191,33 +173,11 @@ ctransformers:
     gpu_layers: 50
 ```
 
-You should also reinstall the `ctransformers` package with CUDA enabled:
+You may have to install the CUDA libraries using:
 
 ```sh
-pip uninstall ctransformers --yes
-CT_CUBLAS=1 pip install ctransformers --no-binary ctransformers
+pip install ctransformers[cuda]
 ```
-
-<details>
-<summary><strong>Show commands for Windows</strong></summary><br>
-
-On Windows PowerShell run:
-
-```sh
-$env:CT_CUBLAS=1
-pip uninstall ctransformers --yes
-pip install ctransformers --no-binary ctransformers
-```
-
-On Windows Command Prompt run:
-
-```sh
-set CT_CUBLAS=1
-pip uninstall ctransformers --yes
-pip install ctransformers --no-binary ctransformers
-```
-
-</details>
 
 ### 🤗 Transformers
 
@@ -229,24 +189,6 @@ huggingface:
 ```
 
 You may have to reinstall PyTorch with CUDA enabled by following the instructions [here](https://pytorch.org/get-started/locally/).
-
-### GPTQ
-
-To enable GPU (CUDA) support for the GPTQ model, add the following to your `chatdocs.yml`:
-
-```yml
-gptq:
-  device: 0
-```
-
-You may have to reinstall PyTorch with CUDA enabled by following the instructions [here](https://pytorch.org/get-started/locally/).
-
-After installing PyTorch with CUDA enabled, you should also reinstall the `auto-gptq` package:
-
-```sh
-pip uninstall auto-gptq --yes
-pip install chatdocs[gptq]
-```
 
 ## License
 
