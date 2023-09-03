@@ -5,10 +5,16 @@ from langchain.callbacks.base import BaseCallbackHandler
 from langchain.llms import CTransformers, HuggingFacePipeline
 from langchain.llms.base import LLM
 
+from .logger import logger
 from .utils import merge
 
 
 def get_gptq_llm(config: Dict[str, Any]) -> LLM:
+    logger.warning(
+        "Using `llm: gptq` in `chatdocs.yml` is deprecated. "
+        "Please use `llm: huggingface` instead as "
+        "🤗 Transformers supports GPTQ models."
+    )
     try:
         from auto_gptq import AutoGPTQForCausalLM
     except ImportError:
