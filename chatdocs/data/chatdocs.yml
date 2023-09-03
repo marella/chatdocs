@@ -9,6 +9,7 @@ ctransformers:
   model_type: llama
   config:
     context_length: 1024
+    max_new_tokens: 256
 
 huggingface:
   model: TheBloke/Wizard-Vicuna-7B-Uncensored-HF
