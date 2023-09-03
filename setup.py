@@ -23,8 +23,9 @@ setup(
         ],
     },
     install_requires=[
+        "accelerate>=0.20.3",
         "chromadb>=0.3.0,<0.4.0",
-        "ctransformers>=0.2.12,<0.3.0",
+        "ctransformers>=0.2.25,<0.3.0",
         "deepmerge>=1.1.0,<2.0.0",
         "InstructorEmbedding>=1.0.1,<2.0.0",
         "langchain>=0.0.181",
@@ -33,6 +34,7 @@ setup(
         "quart>=0.18.3,<0.19.0",
         "sentence-transformers>=2.2.2,<3.0.0",
         "tqdm>=4.64.1,<5.0.0",
+        "transformers>=4.32.0",
         "typer>=0.9.0",
         "typing-extensions>=4.4.0,<5.0.0",
         # Document Loaders
@@ -46,7 +48,8 @@ setup(
     ],
     extras_require={
         "gptq": [
-            "auto-gptq>=0.2.2,<0.3.0",
+            "auto-gptq>=0.4.2,<0.5.0",
+            "optimum>=1.12.0",
         ],
         "tests": [
             "pytest",
