@@ -28,7 +28,7 @@ setup(
         "ctransformers>=0.2.25,<0.3.0",
         "deepmerge>=1.1.0,<2.0.0",
         "InstructorEmbedding>=1.0.1,<2.0.0",
-        "langchain>=0.0.181",
+        "langchain>=0.0.181,<0.0.293",
         "pydantic>=1.9,<2.0",
         "pyyaml>=6.0",
         "quart>=0.18.3,<0.19.0",
